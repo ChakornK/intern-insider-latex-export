@@ -2282,9 +2282,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"intern-insider-latex-export@workspace:.":
+"intern-insider-enhancements@workspace:.":
   version: 0.0.0-use.local
-  resolution: "intern-insider-latex-export@workspace:."
+  resolution: "intern-insider-enhancements@workspace:."
   dependencies:
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.7.1"
     "@rolldown-plugin/solid": "npm:^0.1.0"

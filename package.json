@@ -1,7 +1,7 @@
 {
-  "name": "intern-insider-latex-export",
+  "name": "intern-insider-enhancements",
   "version": "1.0.0",
-  "description": "Export resumes from Intern Insider as a LaTeX document",
+  "description": "QoL enhancements for Intern Insider",
   "license": "MIT",
   "scripts": {
     "dev": "concurrently 'lite-server' 'rolldown -w -c' --names 'server,build' --restart-tries -1 --restart-after 3000",

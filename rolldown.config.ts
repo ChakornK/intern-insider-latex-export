@@ -19,22 +19,22 @@ const gitHash = (() => {
 })();
 
 const userScriptMetadata = `// ==UserScript==
-// @name        Intern Insider LaTeX Resume Exporter
+// @name        Intern Insider Enhancements
 // @namespace   Violentmonkey Scripts
 // @match       https://interninsider.me/*
 // @version     ${process.env.VERSION || "1.0.0"}
 // @author      -
 // @description Build ${gitHash} - ${new Date().toLocaleString("en")}
-// @homepageURL https://github.com/chakornk/intern-insider-latex-export
-// @downloadURL https://github.com/chakornk/intern-insider-latex-export/releases/latest/download/intern-insider-latex-export.user.js
-// @updateURL   https://github.com/chakornk/intern-insider-latex-export/releases/latest/download/intern-insider-latex-export.user.js
+// @homepageURL https://github.com/chakornk/intern-insider-enhancements
+// @downloadURL https://github.com/chakornk/intern-insider-enhancements/releases/latest/download/intern-insider-enhancements.user.js
+// @updateURL   https://github.com/chakornk/intern-insider-enhancements/releases/latest/download/intern-insider-enhancements.user.js
 // ==/UserScript==`;
 
 export default defineConfig({
   input: "src/index.tsx",
   output: {
     cleanDir: true,
-    file: "dist/intern-insider-latex-export.user.js",
+    file: "dist/intern-insider-enhancements.user.js",
     comments: false,
     format: "iife",
     minify: true,

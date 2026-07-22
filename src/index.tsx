@@ -2,8 +2,8 @@ import { FilePen } from "lucide-solid";
 import { render } from "solid-js/web";
 // @ts-ignore
 import appStyles from "./index.css" with { type: "css" };
-import { exportCoverLetter, exportResume } from "./lib/exportLatex";
-import { closeRadixPopover } from "./lib/helpers";
+import { exportCoverLetter, exportResume } from "./lib/latex/exportLatex";
+import { closeRadixPopover } from "./lib/latex/helpers";
 
 const ALLOWED_PATHS = ["/dashboard/resume-builder", "/dashboard/cover-letter-builder"];
 

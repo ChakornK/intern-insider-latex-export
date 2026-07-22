@@ -1,7 +1,7 @@
 // @ts-ignore
-import TEX_PREAMBLE from "../tex/preamble.tex" with { mode: "text" };
+import TEX_PREAMBLE from "./tex/preamble.tex" with { mode: "text" };
 // @ts-ignore
-import TEX_RESUME_CMDS from "../tex/resumeCmds.tex" with { mode: "text" };
+import TEX_RESUME_CMDS from "./tex/resumeCmds.tex" with { mode: "text" };
 import { escLatex } from "./helpers";
 import type {
   Award,
