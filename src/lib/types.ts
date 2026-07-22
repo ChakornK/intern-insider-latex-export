@@ -95,6 +95,38 @@ export interface Award {
   additionalInfo: string;
 }
 
+export interface CoverLetterData {
+  date: string
+  closing: string
+  greeting: string
+  paragraphs: Paragraph[]
+  senderName: string
+  companyName: string
+  senderEmail: string
+  senderPhone: string
+  structureId: string
+  recipientName: string
+  documentFormat: DocumentFormat
+  recipientTitle: string
+  senderAddressLine1: string
+  senderAddressLine2: string
+  recipientAddressLine1: string
+  recipientAddressLine2: string
+}
+
+export interface Paragraph {
+  id: string
+  type: string
+  content: string
+}
+
+export interface DocumentFormat {
+  fontScale: number
+  marginSize: number
+  lineHeight: number
+}
+
+
 export interface ReactFiberNode {
   tag: number;
   type: any;

@@ -1,3 +1,5 @@
+import { PersonalInfo } from "./types";
+
 export const closeRadixPopover = () => {
   document.dispatchEvent(
     new KeyboardEvent("keydown", {

@@ -2,8 +2,10 @@ import { FilePen } from "lucide-solid";
 import { render } from "solid-js/web";
 // @ts-ignore
 import appStyles from "./index.css" with { type: "css" };
-import { exportResume } from "./lib/exportLatex";
+import { exportCoverLetter, exportResume } from "./lib/exportLatex";
 import { closeRadixPopover } from "./lib/helpers";
+
+const ALLOWED_PATHS = ["/dashboard/resume-builder", "/dashboard/cover-letter-builder"];
 
 let dispose = () => {};
 const injectBtn = () => {
@@ -24,7 +26,11 @@ const injectBtn = () => {
   appStyleSheet.replaceSync(appStyles);
   shadowRoot.adoptedStyleSheets = [...document.adoptedStyleSheets, appStyleSheet];
 
-  dispose = render(() => <ExportLatexBtn />, shadowRoot);
+  if (window.location.pathname.startsWith("/dashboard/cover-letter-builder")) {
+    dispose = render(() => <ExportLatexBtn exporter={exportCoverLetter} defaultName="cover_letter" />, shadowRoot);
+  } else if (window.location.pathname.startsWith("/dashboard/resume-builder")) {
+    dispose = render(() => <ExportLatexBtn exporter={exportResume} defaultName="resume" />, shadowRoot);
+  }
 };
 
 let observer: MutationObserver;
@@ -32,7 +38,7 @@ const mountObserver = () => {
   try {
     observer.disconnect();
   } catch {}
-  if (!location.pathname.startsWith("/dashboard/resume-builder")) {
+  if (!ALLOWED_PATHS.find((p) => window.location.pathname.startsWith(p))) {
     try {
       dispose();
     } catch {}
@@ -57,20 +63,20 @@ window.addEventListener("popstate", mountObserver);
 
 mountObserver();
 
-const ExportLatexBtn = () => {
+const ExportLatexBtn = ({ exporter, defaultName }: { exporter: () => string; defaultName: string }) => {
   return (
     <button
       class="focus:bg-accent focus:text-accent-foreground hover:bg-accent hover:text-accent-foreground bg-opacity-100 relative flex w-full cursor-default items-center rounded-sm px-2 py-1.5 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
       type="button"
       on:click={() => {
-        const latex = exportResume();
+        const latex = exporter();
 
         const blob = new Blob([latex], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${document.querySelector("h1")?.textContent ?? "resume"}.tex`;
+        link.download = `${document.querySelector("h1")?.textContent ?? defaultName}.tex`;
         link.click();
         URL.revokeObjectURL(url);
 

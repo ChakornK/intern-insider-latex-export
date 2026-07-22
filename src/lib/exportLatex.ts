@@ -1,9 +1,12 @@
 // @ts-ignore
 import TEX_PREAMBLE from "../tex/preamble.tex" with { mode: "text" };
+// @ts-ignore
+import TEX_RESUME_CMDS from "../tex/resumeCmds.tex" with { mode: "text" };
 import { escLatex } from "./helpers";
 import type {
   Award,
   Certification,
+  CoverLetterData,
   Education,
   Experience,
   Involvement,
@@ -33,6 +36,12 @@ const formatTimeRange = (start: string, end: string, isToPresent: boolean) => {
   return `${startMonth} - ${endMonth}`;
 };
 
+const formatPhoneNumber = (t: string) => {
+  if (!t.match(/^\d+$/)) return t;
+  const padded = t.padStart(10, "0");
+  return `${padded.slice(0, 3)}-${padded.slice(3, 6)}-${padded.slice(6, 10)}`;
+};
+
 /**
  * @param list - List of items separated by newlines
  * ```md
@@ -53,11 +62,13 @@ const formatPersonalInfo = (e: PersonalInfo) => {
 `;
 
   const infoItems = [];
+  if (e.location) infoItems.push(escLatex(e.location));
+  if (e.phone) infoItems.push(`\\href{tel:${escLatex(e.phone)}}{${escLatex(formatPhoneNumber(e.phone))}}`);
   if (e.email) infoItems.push(`\\href{mailto:${escLatex(e.email)}}{${escLatex(e.email)}}`);
-  if (e.linkedin) infoItems.push(`\\href{https://${escLatex(e.linkedin)}}{${escLatex(e.linkedinTitle)}}`);
-  if (e.github) infoItems.push(`\\href{https://${escLatex(e.github)}}{${escLatex(e.githubTitle)}}`);
-  if (e.website) infoItems.push(`\\href{https://${escLatex(e.website)}}{${escLatex(e.websiteTitle)}}`);
-  if (e.otherLink) infoItems.push(`\\href{https://${escLatex(e.otherLink)}}{${escLatex(e.otherLinkTitle)}}`);
+  if (e.linkedin) infoItems.push(`\\href{https://${escLatex(e.linkedin)}}{\\uline{${escLatex(e.linkedinTitle)}}}`);
+  if (e.github) infoItems.push(`\\href{https://${escLatex(e.github)}}{\\uline{${escLatex(e.githubTitle)}}}`);
+  if (e.website) infoItems.push(`\\href{https://${escLatex(e.website)}}{\\uline{${escLatex(e.websiteTitle)}}}`);
+  if (e.otherLink) infoItems.push(`\\href{https://${escLatex(e.otherLink)}}{\\uline{${escLatex(e.otherLinkTitle)}}}`);
   text += infoItems.join("\n\\kern 4pt $|$\\kern 4pt\n");
 
   text += `\n}\n\\end{center}`;
@@ -202,8 +213,6 @@ function formatSection<K extends keyof ResumeDataFields>(key: K, data: ResumeDat
 }
 
 export const exportResume = () => {
-  console.log(TEX_PREAMBLE);
-
   const docRoot = document.querySelector(".scaled-content-for-print") as Record<string, unknown> | null;
   if (!docRoot) throw new Error("Resume document not found");
 
@@ -220,5 +229,47 @@ export const exportResume = () => {
     )
     .map((section) => formatSection(section, resumeData[section]));
 
-  return `${TEX_PREAMBLE}${TEX_SEPARATOR}\\begin{document}${TEX_SEPARATOR}${sections.join(TEX_SEPARATOR)}\n\n\\end{document}`;
+  return `${TEX_PREAMBLE}${TEX_SEPARATOR}${TEX_RESUME_CMDS}${TEX_SEPARATOR}\\begin{document}\n\n${sections.join(TEX_SEPARATOR)}\n\n\\end{document}`;
+};
+
+export const exportCoverLetter = () => {
+  const docRoot = document.querySelector(".cl-scaled-content") as Record<string, unknown> | null;
+  if (!docRoot) throw new Error("Cover letter document not found");
+
+  const fiberKey = Object.keys(docRoot).find((key) => key.startsWith("__reactFiber"));
+  if (!fiberKey) throw new Error("React fiber not found");
+  const fiber = docRoot[fiberKey] as ReactFiberNode;
+
+  const clData = fiber.child?.memoizedProps.data as CoverLetterData | undefined;
+  if (!clData) throw new Error("Cover letter data not found");
+
+  const personalInfo = fiber.child?.memoizedProps.personalInfo as PersonalInfo | undefined;
+  if (!personalInfo) throw new Error("Personal info not found");
+
+  const TEX_LINE_SEPARATOR = " \\\\\n";
+  const TEX_PARAGRAPH_SEPARATOR = `\n\n\\vspace{1.4em}\n\n`;
+  const TEX_SECTION_SEPARATOR = `\n\n\\vspace{2.1em}\n\n`;
+
+  let content = formatPersonalInfo(personalInfo);
+
+  content += `${TEX_SEPARATOR}${TEX_PARAGRAPH_SEPARATOR}${clData.date}${TEX_SECTION_SEPARATOR}`;
+  content += [
+    clData.recipientName,
+    clData.recipientTitle,
+    clData.companyName,
+    clData.recipientAddressLine1,
+    clData.recipientAddressLine2,
+  ]
+    .filter(Boolean)
+    .map(escLatex)
+    .join(TEX_LINE_SEPARATOR);
+
+  content += `${TEX_SECTION_SEPARATOR}${escLatex(clData.greeting)}${TEX_SECTION_SEPARATOR}`;
+  content += "\n\\justifying\n";
+  content += clData.paragraphs.map((p) => `\\qquad ${escLatex(p.content)}`).join(TEX_PARAGRAPH_SEPARATOR);
+  content += "\n\\raggedright\n";
+
+  content += `${TEX_SECTION_SEPARATOR}${escLatex(clData.closing)}${TEX_PARAGRAPH_SEPARATOR}${escLatex(clData.senderName)}`;
+
+  return `${TEX_PREAMBLE}${TEX_SEPARATOR}${TEX_RESUME_CMDS}${TEX_SEPARATOR}\\begin{document}\n\n${content}\n\n\\end{document}`;
 };
