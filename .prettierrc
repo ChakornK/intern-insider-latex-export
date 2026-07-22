@@ -1,0 +1,10 @@
+{
+  "printWidth": 120,
+  "useTabs": false,
+  "tabWidth": 2,
+  "quoteProps": "consistent",
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "@ianvs/prettier-plugin-sort-imports"
+  ]
+}

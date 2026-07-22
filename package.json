@@ -1,0 +1,36 @@
+{
+  "name": "intern-insider-latex-export",
+  "version": "1.0.0",
+  "description": "Export resumes from Intern Insider as a LaTeX document",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently 'lite-server' 'rolldown -w -c' --names 'server,build' --restart-tries -1 --restart-after 3000",
+    "build": "rolldown -c",
+    "format": "prettier --write ./src"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@rolldown-plugin/solid": "^0.1.0",
+    "@types/node": "^26.1.1",
+    "@types/postcss-import": "^14.0.3",
+    "@types/react": "^19.2.17",
+    "@unocss/postcss": "^66.7.5",
+    "@violentmonkey/types": "^0.3.3",
+    "concurrently": "^10.0.3",
+    "lightningcss": "^1.32.0",
+    "lite-server": "^2.6.1",
+    "postcss": "^8.5.19",
+    "postcss-import": "^16.1.1",
+    "prettier": "^3.9.5",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "rolldown": "^1.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2",
+    "unocss": "^66.7.5"
+  },
+  "packageManager": "yarn@4.17.1+sha512.ccbfabf7d7b6b32075088be9386fb9a2e00bb6887ef07fa56effabc890a56d53da1ccc4128d62db245fcbd3961b236d75335bdf7d5320ed6eafb7588b7ad4697",
+  "dependencies": {
+    "lucide-solid": "^1.24.0",
+    "solid-js": "^1.9.14"
+  }
+}

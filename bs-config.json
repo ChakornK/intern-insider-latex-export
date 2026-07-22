@@ -1,0 +1,16 @@
+{
+  "port": 6741,
+  "files": ["./dist/*.{js}"],
+  "server": {
+    "baseDir": "./dist",
+    "middleware": {
+      "0": ""
+    }
+  },
+  "startPath": "/intern-insider-latex-export.user.js",
+  "open": false,
+  "ui": {
+    "enabled": false
+  },
+  "logLevel": "info"
+}
